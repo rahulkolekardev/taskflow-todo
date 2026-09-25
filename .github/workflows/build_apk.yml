@@ -1,0 +1,73 @@
+name: Build TaskFlow Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build APK (Release)
+        run: flutter build apk --release --no-tree-shake-icons
+
+      - name: Rename APK for Clarity
+        run: |
+          mkdir -p output
+          cp build/app/outputs/flutter-apk/app-release.apk output/TaskFlow-v1.0.0.apk
+          ls -la output/
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TaskFlow-Todo-APK
+          path: output/TaskFlow-v1.0.0.apk
+          retention-days: 30
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0
+          name: "TaskFlow Release v1.0.0"
+          body: |
+            ## 🚀 TaskFlow Android APK Release
+
+            Welcome to **TaskFlow** — a beautiful, modern Task & Todo management app built with Flutter!
+
+            ### 📱 What's included:
+            - **Modern Material 3 UI** with smooth gradients and responsive dark/light mode
+            - **Interactive Progress Dashboard** with dynamic motivational quotes
+            - **Categorization & Priorities**: Work, Personal, Fitness, Study, Shopping, Finance
+            - **Smart Filters & Search**: Today, Upcoming, Completed, and instant keyword search
+            - **Quick Actions**: Add, edit, swipe-to-delete with undo support
+
+            ### 📥 Download
+            Download `TaskFlow-v1.0.0.apk` below and install it directly on your Android phone!
+          files: output/TaskFlow-v1.0.0.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
