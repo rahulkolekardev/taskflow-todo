@@ -44,12 +44,6 @@ class AppTheme {
         letterSpacing: -0.5,
       ),
     ),
-    cardTheme: CardTheme(
-      color: surfaceLight,
-      elevation: 2,
-      shadowColor: primaryIndigo.withOpacity(0.08),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -74,12 +68,6 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         letterSpacing: -0.5,
       ),
-    ),
-    cardTheme: CardTheme(
-      color: surfaceDark,
-      elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.3),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
   );
 }

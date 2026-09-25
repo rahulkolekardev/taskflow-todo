@@ -4,10 +4,10 @@ enum TaskPriority {
   low('Low', Colors.blue, Icons.arrow_downward_rounded),
   medium('Medium', Colors.amber, Icons.remove_rounded),
   high('High', Colors.orange, Icons.arrow_upward_rounded),
-  urgent('Urgent', Colors.redAccent, Icons.priority_high_rounded);
+  urgent('Urgent', Colors.red, Icons.priority_high_rounded);
 
   final String label;
-  final MaterialColor color;
+  final Color color;
   final IconData icon;
 
   const TaskPriority(this.label, this.color, this.icon);
